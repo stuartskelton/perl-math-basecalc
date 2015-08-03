@@ -76,7 +76,7 @@ sub from_base {
 }
 
 sub to_base {
-  my ($self,$num) = @_;
+  my ($self,$num,$size) = @_;
   return '-'.$self->to_base(-1*$num) if $num<0; # Handle negative numbers
 
   my $dignum = @{$self->{digits}};
@@ -88,7 +88,12 @@ sub to_base {
     $num /= $dignum;
     #$num = (($num - ($num % $dignum))/$dignum);  # An alternative to the above
   }
-  return length $result ? $result : $self->{digits}[0];
+  my $resultlength = length $result;
+  if ($size && $size > $resultlength){
+    my $smallDigit  = $self->{digits}[0];
+    $result = sprintf("%${smallDigit}${size}s",$result);
+  }
+  return $resultlength ? $result : $self->{digits}[0];
 }
 
 
@@ -151,13 +156,17 @@ of one of the predefined digit sets (see the digit() method below).
 If your digit set includes the character C<->, then a dash at the
 beginning of a number will no longer signify a negative number.
 
-=item * $calc->to_base(NUMBER)
+=item * $calc->to_base(NUMBER,SIZE)
 
 Converts a number to a string representing that number in the
 associated base.
 
 If C<NUMBER> is a C<Math::BigInt> object, C<to_base()> will still work
 fine and give you an exact result string.
+
+If C<SIZE> is defined the result string will be padded up to the size specified.
+If the length of the result string is greater than the size, the size parameter
+will be ignored.
 
 =item * $calc->from_base(STRING)
 

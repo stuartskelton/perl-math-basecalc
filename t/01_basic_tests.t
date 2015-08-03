@@ -2,7 +2,7 @@
 
 use strict;
 use warnings;
-use Test::More tests =>15;
+use Test::More tests =>16;
 use_ok('Math::BaseCalc');
 
 my $calc = new Math::BaseCalc(digits=>[0,1]);
@@ -22,6 +22,11 @@ isa_ok($calc, "Math::BaseCalc");
 {
     my $result = $calc->to_base(13);
     is($result, '1101', "convert back to our base (binary)");
+}
+
+{
+    my $result = $calc->to_base(13,6);
+    is($result, '001101', "convert back to our base (binary) with minimal binary size");
 }
 
 {
