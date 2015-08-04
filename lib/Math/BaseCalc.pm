@@ -90,8 +90,8 @@ sub to_base {
   }
   my $resultlength = length $result;
   if ($size && $size > $resultlength){
-    my $smallDigit  = $self->{digits}[0];
-    $result = sprintf("%${smallDigit}${size}s",$result);
+    my $padding  = $self->{digits}[0] x ($size - $resultlength);
+    $result = sprintf("%s%s",$padding,$result);
   }
   return $resultlength ? $result : $self->{digits}[0];
 }
