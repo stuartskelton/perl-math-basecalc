@@ -2,7 +2,7 @@
 
 use strict;
 use warnings;
-use Test::More tests =>16;
+use Test::More tests =>19;
 use_ok('Math::BaseCalc');
 
 my $calc = new Math::BaseCalc(digits=>[0,1]);
@@ -30,15 +30,32 @@ isa_ok($calc, "Math::BaseCalc");
 }
 
 {
+    my $result = $calc->to_base(13,3);
+    is($result, '1101', "convert back to our base (binary) with minimal binary size smaller than the result length");
+}
+
+{
     $calc->digits('hex');
     my $result = $calc->to_base(46);
     is($result, '2e', "convert 46 into hex(2e)");
 }
 
 {
+    $calc->digits('hex');
+    my $result = $calc->to_base(46,4);
+    is($result, '002e', "convert 46 into hex(2e) with minimal hex size");
+}
+
+{
     $calc->digits([qw(i  a m  v e r y  p u n k)]);
     my $result = $calc->to_base(13933);
     is($result, 'krap', "base 11 with custom letters for each digit. Becomes a517 which is krap with custom letters");
+}
+
+{
+    $calc->digits([qw(i  a m  v e r y  p u n k)]);
+    my $result = $calc->to_base(13933,5);
+    is($result, 'ikrap', "base 11 with custom letters for each digit. Becomes a517 which is krap with custom letters");
 }
 
 {
